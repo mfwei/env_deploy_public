@@ -1,0 +1,23 @@
+#!/usr/bin/perl -w
+
+use strict;
+$|++;
+
+my $host=`/bin/hostname`;
+my $username=$ENV{LOGNAME} || $ENV{USER} || getpwuid($<);
+
+chomp $host;
+chomp $username;
+
+while(1) {
+	open(LOAD, "/proc/loadavg") ||
+		die "Couldn't open /proc/loadavg: $!\n";
+	my @load=split(/ /,<LOAD>);
+	close(LOAD);
+
+	print "\033]0;";
+	print "$username@", "$host: $load[0] $load[1] $load[2] at ", scalar(localtime);
+	print "\007";
+	sleep 1;
+}
+

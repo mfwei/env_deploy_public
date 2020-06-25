@@ -1,0 +1,166 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+"Plugins
+Plugin 'majutsushi/tagbar' " Tag bar"
+Plugin 'scrooloose/nerdtree'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes' " Status line"
+Plugin 'Yggdroot/indentLine' " Indentation level"
+Plugin 'bling/vim-bufferline' " Buffer line"
+Plugin 'ntpeters/vim-better-whitespace'
+"Plugin 'jiangmiao/auto-pairs'
+Plugin 'gdbmgr'
+Plugin 'nelstrom/vim-visual-star-search'
+Plugin 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plugin 'tpope/vim-fugitive'
+"Plugin 'mbbill/echofunc'
+"Plugin 'w0rp/ale'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+" ======== YouCompleteMe ========
+let g:ycm_server_python_interpreter='/usr/bin/python3'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+
+let mapleader=','
+nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_collect_identifiers_from_tags_files = 1
+
+set completeopt=menu,menuone
+let g:ycm_add_preview_to_completeopt = 0
+
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_server_log_level = 'info'
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_complete_in_strings=1
+
+noremap <c-z> <NOP>
+let g:ycm_key_invoke_completion = '<c-z>'
+let g:ycm_max_num_candidates = 15
+
+let g:ycm_semantic_triggers =  {
+			\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+			\ 'cs,lua,javascript': ['re!\w{2}'],
+			\ }
+
+" ======= Tagbar ========
+let g:tagbar_width=25
+autocmd BufReadPost *.cpp,*.c,*.h,*.cc,*.cxx call tagbar#autoopen()
+
+" ======= NetRedTree ========
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+let NERDTreeWinSize=25
+let NERDTreeShowLineNumbers=1
+let NERDTreeAutoCenter=1
+let NERDTreeShowBookmarks=1
+nnoremap <silent> <F5> :NERDTree<CR>
+
+" ====== ALE ========
+"let g:ale_sign_column_always = 1
+"let g:ale_sign_error = '✗'
+"let g:ale_sign_warning = 'w'
+"let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+"let g:ale_echo_msg_format = '[%linter%] %code: %%s'
+"let g:ale_lint_on_text_changed = 'normal'
+"let g:ale_lint_on_insert_leave = 1
+"let g:airline#extensions#ale#enabled = 1
+"let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
+"let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
+"let g:ale_c_cppcheck_options = ''
+"let g:ale_cpp_cppcheck_options = ''
+
+" ======== airline =========
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_section_b = '%-0.10{getcwd()}'
+let g:airline_section_c = '%t'
+let g:airline#extensions#tagbar#enabled = 1
+let g:airline_section_y = ''
+
+" ======== LeaderF =========
+nnoremap <silent> <F2> :LeaderfFile<CR>
+nnoremap <silent> <F3> :LeaderfBufTag<CR>
+nnoremap <silent> <F4> :LeaderfFunction<CR>
+
+" ====== Common optionS of VIM =====
+set nu!
+set smartindent
+set noswapfile
+set tabstop=4
+"set statusline+=%f
+set laststatus=2
+set shiftwidth=4
+set showmatch
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set wildmenu
+set background=dark
+
+syntax enable
+syntax on
+colorscheme desert
+
+" disable
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+set cursorline
+hi CursorLine term=bold cterm=bold guibg=Grey40
+
+" Tab settings/hotkeys
+set tabpagemax=50
+"nmap <LEADER>tn :tabnew<CR>
+"nmap <LEADER>tk :tabclose<CR>
+nmap <C-H> :tabprev<CR>
+nmap <C-L> :tabnext<CR>
+nnoremap <silent> <C-J> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+nnoremap <silent> <C-K> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+
+" remap control + arrow key to select windows
+"noremap <C-Down>  <C-W>j
+"noremap <C-Up>    <C-W>k
+"noremap <C-Left>  <C-W>h
+"noremap <C-Right> <C-W>l
+"noremap <C-J> <C-W>j
+"noremap <C-K> <C-W>k
+"noremap <C-H> <C-W>h
+"noremap <C-L> <C-W>l
+
+" folding "
+" zf[# of endline]G  => marking the area to be folded
+" e.g. zf2025G => mark the area from the pos. of cursor to line 2025
+" zc => fold the marked area
+set foldmethod=marker
+" NOT folding any area by default
+set foldlevel=100

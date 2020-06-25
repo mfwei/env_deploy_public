@@ -1,0 +1,141 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+" alternatively, pass a path where Vundle should install plugins
+"let path = '~/some/path/here'
+"call vundle#rc(path)
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/vundle'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between here and filetype plugin indent on.
+" scripts on GitHub repos
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'tpope/vim-rails.git'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" scripts from http://vim-scripts.org/vim/scripts.html
+Plugin 'L9'
+Plugin 'FuzzyFinder'
+" scripts not on GitHub
+" Bundle 'git://git.wincent.com/command-t.git'
+" ...
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+
+filetype plugin indent on     " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList          - list configured plugins
+" :PluginInstall(!)    - install (update) plugins
+" :PluginSearch(!) foo - search (or refresh cache first) for foo
+" :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Plugin commands are not allowed.
+" Put your stuff after this line
+"
+"
+nnoremap <silent> <F5> :NERDTree<CR>
+
+map <f7> :Tlist<CR>
+ " Open and close all the three plugins on the same time
+nmap <F8> :TrinityToggleAll<CR>
+ " Open and close the srcexpl.vim separately
+nmap <F9> :TrinityToggleSourceExplorer<CR>
+ " Open and close the taglist.vim separately
+nmap <F10> :TrinityToggleTagList<CR>
+ " Open and close the NERD_tree.vim separately
+nmap <F11> :TrinityToggleNERDTree<CR>
+
+" set mouse=nv
+
+set tags=/src/tags
+cs add /src/cscope.out
+
+function! Csc()
+   cscope find c <cword>
+   copen
+endfunction
+command! Csc call Csc()
+
+color desert
+set cursorline
+hi CursorLine term=bold cterm=bold guibg=Grey40
+
+set tabstop=4
+"set statusline+=%f
+set laststatus=2
+set shiftwidth=4
+"set noswapfile
+
+:autocmd CursorMoved * exe exists("HlUnderCursor")?HlUnderCursor?printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\')):'match none':""
+:nnoremap <silent> <F3> :exe "let HlUnderCursor=exists(\"HlUnderCursor\")?HlUnderCursor*-1+1:1"<CR>
+
+"nmap <F2> :ConqueTerm bash<CR>
+"nmap <F4> :ConqueTermTab bash<CR>
+"nmap <F5> :ConqueTermSplit bash<CR>
+"nmap <F6> :ConqueTermVSplit bash<CR>
+
+let Tlist_Auto_Update = 1
+let Tlist_Auto_Open = 1
+
+" Tab settings/hotkeys
+set tabpagemax=50
+nmap <LEADER>tn :tabnew<CR>
+nmap <LEADER>tk :tabclose<CR>
+nmap <C-H> :tabprev<CR>
+nmap <C-L> :tabnext<CR>
+nnoremap <silent> <C-J> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+nnoremap <silent> <C-K> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+
+set showmatch
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set wildmenu
+
+" cscope_maps
+nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+" The Silver Searcher
+if executable('ag')
+	" Use ag over grep
+	set grepprg=ag\ --nogroup\ --nocolor
+
+	" Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+	let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+	" ag is fast enough that CtrlP doesn't need to cache
+	let g:ctrlp_use_caching = 0
+endif
+
+" bind K to grep word under cursor (Shift + K)
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+" bind \ (backward slash) to grep shortcut
+command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+
+nnoremap \ :Ag<SPACE>
+"Grepping Example -
+":Ag -i Stripe app/models
+
+" automatically update tag-list
+autocmd BufEnter,CursorMovedI * silent! TlistHighlightTag

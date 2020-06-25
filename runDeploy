@@ -1,0 +1,185 @@
+#!/bin/sh
+
+__BASE_PATH=$PWD
+__BACKUP_ROOT=$HOME/.envDeploy_backup
+
+backup_config() {
+	if [ ! -d $__BACKUP_ROOT ] ; then
+		mkdir -p $__BACKUP_ROOT
+	fi
+
+	cp -v ~/.bashrc $__BACKUP_ROOT/bashrc.user
+	cp -v ~/.profile $__BACKUP_ROOT/profile.user
+	cp -v ~/.vimrc $__BACKUP_ROOT/vimrc.user
+	cp -v /etc/bash.bashrc $__BACKUP_ROOT/bashrc.etc
+}
+
+clean_config() {
+	rm ~/.vimrc
+	rm ~/.tmux.conf
+	rm -rf ~/.vim
+	rm -rf ~/.gitconfig
+
+	if [ -d $__BACKUP_ROOT ] ; then
+		cp -v $__BACKUP_ROOT/bashrc.user ~/.basrc
+		cp -v $__BACKUP_ROOT/profile.user ~/.profile
+		cp -v $__BACKUP_ROOT/vimrc.user ~/.vimrc
+		cp -v $__BACKUP_ROOT/bashrc.etc /etc/bash.bashrc
+	fi
+}
+
+apply_config() {
+	local src=$1
+	local dst=$2
+
+	if [ ! -f $dst ]
+	then
+		cat $src >> $dst
+	else
+		diff $dst $src | grep '^>' | cut -c 3- >> $dst
+	fi
+}
+
+update_and_install_packages() {
+	apt-get update
+	apt-get upgrade -y
+
+	echo "Installing Developer Tools ... "
+	apt-get install silversearcher-ag cifs-utils tig exuberant-ctags cscope vim tmux screen shellcheck build-essential curl git jq landscape-common inxi ssh htop libncurses-dev nmon parallel debootstrap -y
+
+	echo "Install Build Dependencies ... "
+	apt-get install libelf-dev flex bison libssl-dev git openssh-server telnetd nfs-kernel-server samba system-config-samba php-cli php-pgsql manpages-dev python python3 -y
+
+	echo "Install Btrfs Development Dependencies ... "
+	apt-get install autogen autoconf pkg-config xmlto asciidoc e2fslibs-dev libblkid-dev zlib1g-dev libzstd-dev liblzo2-dev python3.6-dev python3-setuptools -y
+
+	echo "Repair Ubuntu chinese characters issue ... "
+	apt-get remove fonts-arphic-ukai fonts-arphic-uming -y
+}
+
+setup_bash_env() {
+	echo "Set up Bash Env. ..."
+	apply_config ./bash_config/bashrc.etc /etc/bash.bashrc
+	apply_config ./bash_config/bashrc.user ~/.bashrc
+	apply_config ./bash_config/profile ~/.profile
+}
+
+install_tools() {
+#	echo "Install Google Chrome ..."
+#	wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+#	sudo dpkg -i ./google-chrome*.deb
+#	sudo apt-get install -f -y
+#	rm -f ./google-chrome*.deb
+
+	echo "Install /bin tools ... "
+#	cp ./tools/tl /bin
+#	cp ./tools/diskage /bin
+#	echo '/bin/tl &' >> ~/.bashrc
+#	echo 'killall tl > /dev/null 2>&1' >> ~/.bash_logout
+}
+
+setup_VIM_env() {
+	echo "Install VIM plugins ..."
+	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+	ln -s ${__BASE_PATH}/vim_config/v2.current/vimrc ~/.vimrc
+	vim +PluginInstall +qall
+
+	# Essentials for Plugin 'YouCompleteMe'
+	echo "Install Essentials for Plugin 'YouCompleteMe'"
+	sudo apt-get update
+	sudo apt-get install build-essential python-dev python3-dev cmake -y
+
+	echo "Build & Setup 'YouCompleteMe'"
+	python3 ~/.vim/bundle/YouCompleteMe/install.py --clang-completer
+	ln -s ${__BASE_PATH}/vim_config/v2.current/ycm/ycm_extra_conf.py ~/.vim/.ycm_extra_conf.py
+}
+
+setup_GIT_env() {
+	echo "Set up GIT configurations ..."
+
+	git config --global user.name "Ming-Feng Wei"
+	git config --global user.email "xx@xxx"
+	git config --global core.filemode true
+	git config --global core.editor vim
+	git config --global alias.st status
+	git config --global alias.ci commit
+	git config --global alias.co checkout
+	git config --global alias.br branch
+	git config --global alias.df diff
+	git config --global alias.pick cherry-pick
+	git config --global alias.fp format-patch
+	git config --global alias.la "log --graph --decorate --pretty=oneline --abbrev-commit --all"
+	git config --global alias.ll "log --graph --decorate --pretty=oneline --abbrev-commit"
+	git config --global alias.lf "log --stat --decorate --format=fuller abbrev-commit"
+	git config --global color.ui auto
+	git config --global color.diff auto
+	git config --global color.status auto
+	git config --global color.branch auto
+	git config --global color.log auto
+	git config --global push.default simple
+}
+
+setup_sys_env() {
+	echo "System ENV Setup"
+
+	#soft-link to tmux.conf
+	ln -s ${__BASE_PATH}/env_config/tmux.conf ~/.tmux.conf
+
+#	echo "Set up /tmp RamDisk ..."
+
+#	cp tools/ramtmp.sh /etc/init.d/
+#	chmod 755 /etc/init.d/ramtmp.sh
+#	ln -s /etc/init.d/ramtmp.sh /etc/rcS.d/S50ramtmp.sh
+}
+
+main() {
+	if [ "$(`which id` -u)" -ne 0 ]; then
+		echo "Sorry, must be root"
+		exit 1
+	fi
+
+	update_and_install_packages
+	if [ $? -ne 0 ] ; then
+		echo "error occurs in update_and_install_packages()"
+		exit 1
+	fi
+
+	setup_bash_env
+	if [ $? -ne 0 ] ; then
+		echo "error occurs in setup_bash_env()"
+		exit 1
+	fi
+
+	install_tools
+	if [ $? -ne 0 ] ; then
+		echo "error occurs in install_tools()"
+		exit 1
+	fi
+
+	setup_VIM_env
+	if [ $? -ne 0 ] ; then
+		echo "error occurs in setup_VIM_env()"
+		exit 1
+	fi
+
+	setup_GIT_env
+	if [ $? -ne 0 ] ; then
+		echo "error occurs in setup_GIT_env()"
+		exit 1
+	fi
+
+	setup_sys_env
+	if [ $? -ne 0 ] ; then
+		echo "error occurs in setup_sys_env()"
+		exit 1
+	fi
+
+	echo "DONE"
+	exit 0
+}
+
+#main
+#exit 0
+
+# Allows to call a function based on arguments passed to the script
+$*

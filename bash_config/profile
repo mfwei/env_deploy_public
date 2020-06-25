@@ -1,0 +1,15 @@
+# ~/.profile: executed by Bourne-compatible login shells.
+
+alias ducks='du -cks * | sort -rn | head -11'
+alias ls='ls -aF --color'
+alias cpp='rsync -av --progress'
+
+export COLORIZED="yes"
+
+alias ..='cd ..'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+
+alias vim="vim -p"
+alias vi="vim -p"
+alias rebash="source ~/.bashrc"
