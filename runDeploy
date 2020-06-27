@@ -45,7 +45,7 @@ update_and_install_packages() {
 	apt-get upgrade -y
 
 	echo "Installing Developer Tools ... "
-	apt-get install silversearcher-ag cifs-utils tig exuberant-ctags cscope vim tmux screen shellcheck build-essential curl git jq landscape-common inxi ssh htop libncurses-dev nmon parallel debootstrap -y
+	apt-get install silversearcher-ag cifs-utils tig exuberant-ctags cscope vim tmux screen shellcheck build-essential curl git jq landscape-common inxi ssh htop libncurses-dev nmon parallel debootstrap pv -y
 
 	echo "Install Build Dependencies ... "
 	apt-get install libelf-dev flex bison libssl-dev git openssh-server telnetd nfs-kernel-server samba system-config-samba php-cli php-pgsql manpages-dev python python3 -y
