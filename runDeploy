@@ -3,6 +3,8 @@
 __BASE_PATH=$PWD
 __BACKUP_ROOT=$HOME/.envDeploy_backup
 
+source ${__BASE_PATH}/env_config/git_config
+
 backup_config() {
 	if [ ! -d $__BACKUP_ROOT ] ; then
 		mkdir -p $__BACKUP_ROOT
@@ -95,31 +97,6 @@ setup_VIM_env() {
 	echo "Build & Setup 'YouCompleteMe'"
 	python3 ~/.vim/bundle/YouCompleteMe/install.py --clang-completer
 	ln -s ${__BASE_PATH}/vim_config/v2.current/ycm/ycm_extra_conf.py ~/.vim/.ycm_extra_conf.py
-}
-
-setup_GIT_env() {
-	echo "Set up GIT configurations ..."
-
-	git config --global user.name "Ming-Feng Wei"
-	git config --global user.email "xx@xxx"
-	git config --global core.filemode true
-	git config --global core.editor vim
-	git config --global alias.st status
-	git config --global alias.ci commit
-	git config --global alias.co checkout
-	git config --global alias.br branch
-	git config --global alias.df diff
-	git config --global alias.pick cherry-pick
-	git config --global alias.fp format-patch
-	git config --global alias.la "log --graph --decorate --pretty=oneline --abbrev-commit --all"
-	git config --global alias.ll "log --graph --decorate --pretty=oneline --abbrev-commit"
-	git config --global alias.lf "log --stat --decorate --format=fuller abbrev-commit"
-	git config --global color.ui auto
-	git config --global color.diff auto
-	git config --global color.status auto
-	git config --global color.branch auto
-	git config --global color.log auto
-	git config --global push.default simple
 }
 
 setup_sys_env() {
