@@ -51,7 +51,7 @@ update_and_install_packages() {
 	apt-get install libelf-dev flex bison libssl-dev git openssh-server telnetd nfs-kernel-server samba system-config-samba php-cli php-pgsql manpages-dev python python3 -y
 
 	echo "Install Btrfs Development Dependencies ... "
-	apt-get install autogen autoconf pkg-config xmlto asciidoc e2fslibs-dev libblkid-dev zlib1g-dev libzstd-dev liblzo2-dev python3.6-dev python3-setuptools -y
+	apt-get install autogen autoconf pkg-config xmlto asciidoc e2fslibs-dev libblkid-dev zlib1g-dev libzstd-dev liblzo2-dev python3.6-dev python3-setuptools btrfs-progs -y
 
 	echo "Repair Ubuntu chinese characters issue ... "
 	apt-get remove fonts-arphic-ukai fonts-arphic-uming -y
