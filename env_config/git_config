@@ -6,8 +6,8 @@ __GIT_USER_EMAIL="xxx@xxx.xxx"
 setup_GIT_env() {
 	echo "Set up GIT configurations ..."
 
-	git config --global user.name ${__GIT_USER_NAME}
-	git config --global user.email ${__GIT_USER_EMAIL}
+	git config --global user.name "${__GIT_USER_NAME}"
+	git config --global user.email "${__GIT_USER_EMAIL}"
 	git config --global core.filemode true
 	git config --global core.editor vim
 	git config --global alias.st status
