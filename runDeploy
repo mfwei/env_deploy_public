@@ -50,7 +50,7 @@ update_and_install_packages() {
 	apt-get install silversearcher-ag cifs-utils tig exuberant-ctags cscope vim tmux screen shellcheck build-essential curl git jq landscape-common inxi ssh htop libncurses-dev nmon parallel debootstrap pv -y
 
 	echo "Install Build Dependencies ... "
-	apt-get install libelf-dev flex bison libssl-dev git openssh-server telnetd nfs-kernel-server samba php-cli php-pgsql manpages-dev python -y
+	apt-get install libelf-dev flex bison libssl-dev git openssh-server telnetd nfs-kernel-server samba php-cli php-pgsql manpages-dev python zstd -y
 
 	echo "Install Btrfs Development Dependencies ... "
 	apt-get install autogen autoconf pkg-config xmlto asciidoc e2fslibs-dev libblkid-dev zlib1g-dev libzstd-dev liblzo2-dev btrfs-progs -y
