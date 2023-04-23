@@ -13,7 +13,6 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugins
 Plugin 'majutsushi/tagbar' " Tag bar"
 Plugin 'scrooloose/nerdtree'
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes' " Status line"
 Plugin 'Yggdroot/indentLine' " Indentation level"
