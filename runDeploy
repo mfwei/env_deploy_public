@@ -56,7 +56,7 @@ update_and_install_packages() {
 	apt-get install autogen autoconf pkg-config xmlto asciidoc e2fslibs-dev libblkid-dev zlib1g-dev libzstd-dev liblzo2-dev btrfs-progs -y
 
 	echo "Install BCC Dependencies ... "
-#	apt-get install libclang-dev llvm netperf iperf -y
+#	apt-get install libclang-dev llvm netperf iperf cmake -y
 
 	echo "Install Virtual Development Board Dependencies ... "
 	apt-get install qemu libncurses5-dev gcc-arm-linux-gnueabi build-essential gcc-arm-none-eabi gcc-aarch64-linux-gnu -y
@@ -88,15 +88,6 @@ setup_VIM_env() {
 	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 	ln -s ${__BASE_PATH}/vim_config/v2.current/vimrc ~/.vimrc
 	vim +PluginInstall +qall
-
-	# Essentials for Plugin 'YouCompleteMe'
-	echo "Install Essentials for Plugin 'YouCompleteMe'"
-	sudo apt-get update
-	sudo apt-get install build-essential python-dev python3-dev cmake -y
-
-	echo "Build & Setup 'YouCompleteMe'"
-	python3 ~/.vim/bundle/YouCompleteMe/install.py --clang-completer
-	ln -s ${__BASE_PATH}/vim_config/v2.current/ycm/ycm_extra_conf.py ~/.vim/.ycm_extra_conf.py
 }
 
 setup_sys_env() {
