@@ -55,6 +55,9 @@ update_and_install_packages() {
 	echo "Install Btrfs Development Dependencies ... "
 	apt-get install autogen autoconf pkg-config xmlto asciidoc e2fslibs-dev libblkid-dev zlib1g-dev libzstd-dev liblzo2-dev btrfs-progs -y
 
+	echo "Install BCC Dependencies ... "
+#	apt-get install libclang-dev llvm netperf iperf -y
+
 	echo "Install Virtual Development Board Dependencies ... "
 	apt-get install qemu libncurses5-dev gcc-arm-linux-gnueabi build-essential gcc-arm-none-eabi gcc-aarch64-linux-gnu -y
 }
