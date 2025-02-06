@@ -73,6 +73,7 @@ setup_bash_env() {
 	apply_config ./bash_config/bashrc.etc /etc/bash.bashrc
 	apply_config ./bash_config/bashrc.user ~/.bashrc
 	apply_config ./bash_config/profile ~/.profile
+	echo "source ${PWD}/bash_config/bash_command_timer.sh" >> ~/.bashrc
 }
 
 install_tools() {
