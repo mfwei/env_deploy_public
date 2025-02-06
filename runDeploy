@@ -60,6 +60,12 @@ update_and_install_packages() {
 
 	echo "Install Virtual Development Board Dependencies ... "
 	apt-get install qemu libncurses5-dev gcc-arm-linux-gnueabi build-essential gcc-arm-none-eabi gcc-aarch64-linux-gnu -y
+
+	echo "Repair Ubuntu chinese characters issue ... "
+	apt-get remove fonts-arphic-ukai fonts-arphic-uming -y
+
+	echo "Remove Automatic Updates on Ubuntu ..."
+	apt-get remove unattended-upgrades
 }
 
 setup_bash_env() {
