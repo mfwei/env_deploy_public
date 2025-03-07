@@ -1,6 +1,6 @@
 Scripts to setup my favorite enviroment 
 ============
 
-- NOTE taht user name and email address of GIT client will be set in 'runDeploy'
+- NOTE: user name and email address of GIT client should be set in 'runDeploy' before deployment
 
-- Just run 'make' if ready to set up your enviroment
+- Just run 'make' to set up your enviroment
