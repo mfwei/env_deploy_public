@@ -77,17 +77,24 @@ setup_bash_env() {
 }
 
 install_tools() {
-#	echo "Install Google Chrome ..."
-#	wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-#	sudo dpkg -i ./google-chrome*.deb
-#	sudo apt-get install -f -y
-#	rm -f ./google-chrome*.deb
+
+: << DISABLE_CHROME
+	echo "Install Google Chrome ..."
+	wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+	sudo dpkg -i ./google-chrome*.deb
+	sudo apt-get install -f -y
+	rm -f ./google-chrome*.deb
+DISABLE_CHROME
 
 	echo "Install /bin tools ... "
-#	cp ./tools/tl /bin
-#	cp ./tools/diskage /bin
-#	echo '/bin/tl &' >> ~/.bashrc
-#	echo 'killall tl > /dev/null 2>&1' >> ~/.bash_logout
+
+: << DISABLE_TOOL
+	cp ./tools/tl /bin
+	cp ./tools/diskage /bin
+
+	echo '/bin/tl &' >> ~/.bashrc
+	echo 'killall tl > /dev/null 2>&1' >> ~/.bash_logout
+DISABLE_TOOL
 }
 
 setup_VIM_env() {
@@ -103,11 +110,13 @@ setup_sys_env() {
 	#soft-link to tmux.conf
 	ln -s ${__BASE_PATH}/env_config/tmux.conf ~/.tmux.conf
 
-#	echo "Set up /tmp RamDisk ..."
+: << DISABLE_FUNC
+	echo "Set up /tmp RamDisk ..."
 
-#	cp tools/ramtmp.sh /etc/init.d/
-#	chmod 755 /etc/init.d/ramtmp.sh
-#	ln -s /etc/init.d/ramtmp.sh /etc/rcS.d/S50ramtmp.sh
+	cp tools/ramtmp.sh /etc/init.d/
+	chmod 755 /etc/init.d/ramtmp.sh
+	ln -s /etc/init.d/ramtmp.sh /etc/rcS.d/S50ramtmp.sh
+DISABLE_FUNC
 }
 
 main() {
