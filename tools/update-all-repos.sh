@@ -7,8 +7,10 @@ function gitall() {
 		D=${D%/*}
 		cd $W/$D
 		pwd
-		git pull
+		git pull &
 	done
+
+	wait
 	cd $W # ensure we end up on the starting wd
 }
 
